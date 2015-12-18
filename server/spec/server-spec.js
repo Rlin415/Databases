@@ -13,7 +13,7 @@ describe("Persistent Node Chat Server", function() {
       user: "root",
       password: "",
       database: "chat"
-    });
+    }); 
     dbConnection.connect();
 
        var tablename = ""; // TODO: fill this out
