@@ -8,6 +8,14 @@ var parser = require('body-parser');
 // Router
 var router = require('./routes.js');
 
+db.connection.connect(function(err) {
+  if (err) {
+    console.error('error connecting');
+    return;
+  }
+  console.log('successfully connected to database');
+});
+
 var app = express();
 module.exports.app = app;
 
@@ -29,4 +37,3 @@ if (!module.parent) {
   app.listen(app.get("port"));
   console.log("Listening on", app.get("port"));
 }
-
