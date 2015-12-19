@@ -6,6 +6,7 @@ module.exports = {
     get: function (req, res) {
       // parse req.data
       // models.get data from database
+      console.log('get within controller', req.body);
       models.messages.get(res);
     }, // a function which handles a get request for all messages
     post: function (req, res) {
@@ -17,7 +18,11 @@ module.exports = {
 
   users: {
     // Ditto as above
-    get: function (req, res) {},
-    post: function (req, res) {}
+    get: function (req, res) {
+      models.users.get(res);
+    },
+    post: function (req) {
+      models.users.post(req.body);
+    }
   }
 };

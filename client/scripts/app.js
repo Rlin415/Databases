@@ -1,6 +1,8 @@
 // YOUR CODE HERE:
 var app = {
-  server: 'http://127.0.0.1:3000/classes/messages',
+  server: "http://127.0.0.1:3000",
+  messagesServer: 'http://127.0.0.1:3000/classes/messages',
+  usersServer: 'http://127.0.0.1:3000/classes/users',
   invalid: ['script', 'img', 'body', 'iframe', 'input', 'link', 'table', 'div', 'object']
 };
 
@@ -21,9 +23,11 @@ app.init = function() {
     app.fetch();
   });
 
-  client.username = prompt('Enter your name:');
-
+ client.username = prompt('Enter your name:');
   app.fetch();
+  app.server = app.usersServer;
+  app.send({username: client.username});
+  app.server = app.messagesServer;
   setInterval(app.updateMsg, 1000);
 };
 
@@ -71,7 +75,6 @@ app.fetch = function() {
         if (app.isValid(obj)) {
           client.messages.push(obj);
         }
-
       });
 
     },
@@ -106,7 +109,6 @@ app.addFriend = function(friend) {
     client.friends.push(friend);
     $('#friends').append('<p>' + friend + '</p>');
   }
-
 };
 
 app.handleSubmit = function() {
@@ -121,6 +123,7 @@ app.handleSubmit = function() {
 
 app.updateMsg = function() {
   app.clearMessages();
+  app.fetch();
   client.messages.forEach(function(msg) {
     app.addMessage(msg);
   });

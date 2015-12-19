@@ -10,9 +10,9 @@ CREATE TABLE messages ( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 );
 
 -- Error: Not showing up when compiled
--- CREATE TABLE rooms (
---   roomname VARCHAR(20)
--- );
+CREATE TABLE users (
+  username VARCHAR(20)
+);
 
 /*  Execute this file from the command line by typing:
  *    mysql -u root < server/schema.sql

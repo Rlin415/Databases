@@ -3,14 +3,15 @@ var db = require('../db');
 module.exports = {
   messages: {
     get: function(res) {
-      db.connection.query('SELECT * FROM messages', function(err, result, fields) {
+      db.connection.query('SELECT * FROM messages', function(err, result) {
+        if (err) throw err;
         res.send(result);
       });
+    },
 
-    }, // a function which produces all the messages
     post: function(message) {
       db.connection.query('INSERT INTO messages SET ?', message, function(err, result) {
-        console.log(err);
+        if (err) throw err;
         console.log(result);
       });
     }
@@ -18,8 +19,18 @@ module.exports = {
 
   users: {
     // Ditto as above.
-    get: function() {},
-    post: function() {}
+    get: function(res) {
+      db.connection.query('SELECT * FROM users', function(err, result) {
+        if (err) throw err;
+        res.send(result);
+      }); 
+    },
+    post: function(user) {
+      db.connection.query('INSERT INTO users SET ?', user, function(err, result) {
+        if (err) throw err;
+        console.log("models poast", result);
+      });
+    }
   }
 };
 
