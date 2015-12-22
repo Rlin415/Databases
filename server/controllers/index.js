@@ -1,28 +1,55 @@
-var models = require('../models');
 var bluebird = require('bluebird');
+var db = require('../db');
+var Message = db.Message;
+var User = db.User;
 
 module.exports = {
   messages: {
     get: function (req, res) {
-      // parse req.data
-      // models.get data from database
-      console.log('get within controller', req.body);
-      models.messages.get(res);
-    }, // a function which handles a get request for all messages
+      // fetch all messages
+      Message.findAll({ incude: [ User ] })
+        .then(function(results) {
+          res.json(results);
+        });
+    },
     post: function (req, res) {
-    	// parse '{username: "robert", text: "hello world", roomname: "inception"}'
-    	// models.post data to database
-    	models.messages.post(req.body);
-    } // a function which handles posting a message to the database
+      User.findOrCreate( { where: { username: req.body['username'] } } )
+        .spread(function(user, created) {
+          if (!created) {console.log('Error creating message');}
+          var param = {
+            text: req.body['text'],
+            roomname: req.body['roomname'],
+            username: user.username,
+            userId: user.id
+          };
+          Message.create(param)
+            .then(function(result) {
+              console.log('RESULTS: ', result);
+              result.setUser(user);
+              res.sendStatus(201);
+            });
+        });
+    }
   },
 
   users: {
     // Ditto as above
     get: function (req, res) {
-      models.users.get(res);
+      // fetch all users
+      User.findAll()
+        .then(function(results) {
+          res.json(results);
+        });
     },
-    post: function (req) {
-      models.users.post(req.body);
+    post: function (req, res) {
+      // create a user
+      var param = {
+        username: req.body['username']
+      };
+      User.create(param)
+        .then(function() {
+          res.sendStatus(201);
+        });
     }
   }
 };
